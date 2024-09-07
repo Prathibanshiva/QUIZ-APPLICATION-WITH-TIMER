@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SimpleQuizGame {
+    // Inner class to represent a quiz question
     static class QuizQuestion {
         String question;
         List<String> options;
@@ -15,11 +14,16 @@ public class SimpleQuizGame {
             this.options = options;
             this.correctAnswerIndex = correctAnswerIndex;
         }
+
+        // Check if the user's answer is correct
         boolean isCorrect(int answerIndex) {
             return answerIndex == correctAnswerIndex;
         }
     }
+
+    // Main class to handle quiz game logic
     public static void main(String[] args) {
+        // Initialize quiz questions
         List<QuizQuestion> questions = new ArrayList<>();
         questions.add(new QuizQuestion(
             "What is the capital of France?",
@@ -39,6 +43,8 @@ public class SimpleQuizGame {
 
         Scanner scanner = new Scanner(System.in);
         int score = 0;
+
+        // Iterate over each question
         for (int i = 0; i < questions.size(); i++) {
             QuizQuestion q = questions.get(i);
 
@@ -46,26 +52,21 @@ public class SimpleQuizGame {
             for (int j = 0; j < q.options.size(); j++) {
                 System.out.println((j + 1) + ". " + q.options.get(j));
             }
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("\nTime's up!");
-                }
-            };
-            timer.schedule(task, 10000); 
 
             System.out.print("Your answer (1-" + q.options.size() + "): ");
-            int userAnswer = scanner.nextInt();
-            timer.cancel();
-            if (q.isCorrect(userAnswer - 1)) {
+            int userAnswer = scanner.nextInt() - 1; // Convert to 0-based index
+
+            // Check if the answer is correct
+            if (q.isCorrect(userAnswer)) {
                 System.out.println("Correct!");
                 score++;
             } else {
-                System.out.println("Incorrect.");
+                System.out.println("Incorrect. The correct answer was option " + (q.correctAnswerIndex + 1));
             }
             System.out.println();
         }
+
+        // Display the final score
         System.out.println("Quiz Finished!");
         System.out.println("Your score: " + score + "/" + questions.size());
 
